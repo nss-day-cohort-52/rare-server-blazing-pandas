@@ -1,12 +1,12 @@
 CREATE TABLE "Users" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-  "first_name" varchar,
-  "last_name" varchar,
-  "email" varchar,
-  "bio" varchar,
-  "username" varchar,
-  "password" varchar,
-  "profile_image_url" varchar,
+  "first_name" TEXT NOT NULL,
+  "last_name" TEXT NOT NULL,
+  "email" TEXT NOT NULL,
+  "bio" TEXT NOT NULL,
+  "username" TEXT NOT NULL,
+  "password" TEXT NOT NULL,
+  "profile_image_url" TEXT NOT NULL,
   "created_on" date,
   "active" bit
 );
@@ -87,3 +87,5 @@ CREATE TABLE "Categories" (
 INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
+
+DROP TABLE Users;
