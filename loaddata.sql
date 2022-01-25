@@ -93,3 +93,7 @@ INSERT INTO Tags ('label') VALUES ('React');
 INSERT INTO Tags ('label') VALUES ('Python');
 INSERT INTO Tags ('label') VALUES ('Django');
 INSERT INTO Tags ('label') VALUES ('NSS');
+
+
+INSERT INTO Posts VALUES (null, 1, 1, 'JavaScript', 43, 'https://c.tenor.com/VFFJ8Ei3C2IAAAAM/rickroll-rick.gif', 'Worked on JS today and it was pretty awful.', 1);
+INSERT INTO Posts VALUES (null, 2, 1, 'JavaScript', 44, 'https://c.tenor.com/VFFJ8Ei3C2IAAAAM/rickroll-rick.gif', 'Worked on JS today and it was pretty much still not that great.', 1);
