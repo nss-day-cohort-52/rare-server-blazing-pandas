@@ -1,6 +1,6 @@
 import sqlite3
 import json
-from models import Post
+from models import Post, User, Category
 
 
 def get_all_posts():
@@ -16,15 +16,26 @@ def get_all_posts():
             p.publication_date,
             p.image_url,
             p.content,
-            p.approved
+            p.approved,
+            u.username users_username,
+            c.label categories_label
         FROM Posts p
+        JOIN Users u
+            ON u.id = p.user_id
+        JOIN Categories c
+            ON c.id = p.category_id
         """)
+
         posts = []
         dataset = db_cursor.fetchall()
         for row in dataset:
             post = Post(row['id'], row['user_id'], row['category_id'],
                     row['title'], row['publication_date'],
                     row['image_url'], row['content'], row['approved'])
+            user =  {"username": row['users_username']}
+            category = Category(row['category_id'], row['categories_label'])
+            post.user = user
+            post.category = category.__dict__
             posts.append(post.__dict__)
     return json.dumps(posts)
 
