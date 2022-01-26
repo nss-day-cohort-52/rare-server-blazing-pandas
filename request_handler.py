@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from views import get_all_tags, create_tag
-from views.user import create_user, login_user
+from views.user import create_user, login_user, get_all_users
 from views import get_all_posts
 
 
@@ -71,6 +71,9 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_all_posts()}"
                 # else:
                 #     response = f"{get_single_post(id)}"
+            elif resource == "users":
+                if id is None:
+                    response = f"{get_all_users()}"
         
         self.wfile.write(response.encode())
 
