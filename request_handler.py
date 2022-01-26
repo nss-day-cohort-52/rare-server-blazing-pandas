@@ -3,6 +3,8 @@ import json
 from views import get_all_tags
 from views.posts import get_single_post
 from views.user import create_user, login_user
+from views import get_all_tags, create_tag
+from views.user import create_user, login_user, get_all_users
 from views import get_all_posts
 
 
@@ -72,6 +74,11 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_all_posts()}"
                 else:
                     response = f"{get_single_post(id)}"
+                # else:
+                #     response = f"{get_single_post(id)}"
+            elif resource == "users":
+                if id is None:
+                    response = f"{get_all_users()}"
         
         self.wfile.write(response.encode())
 
@@ -88,6 +95,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             response = login_user(post_body)
         if resource == 'register':
             response = create_user(post_body)
+        if resource == 'tags':
+            response = create_tag(post_body)
 
         self.wfile.write(response.encode())
 
