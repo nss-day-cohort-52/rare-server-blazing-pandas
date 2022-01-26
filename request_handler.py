@@ -1,5 +1,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
+from views import get_all_tags
+from views.posts import get_single_post
+from views.user import create_user, login_user
 from views import get_all_tags, create_tag
 from views import create_user, login_user, get_all_users
 from views import get_all_posts, create_post
@@ -69,6 +72,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             elif resource == "posts":
                 if id is None:
                     response = f"{get_all_posts()}"
+                else:
+                    response = f"{get_single_post(id)}"
                 # else:
                 #     response = f"{get_single_post(id)}"
             elif resource == "users":
