@@ -89,7 +89,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             response = create_user(post_body)
         if resource == 'tags':
             response = create_tag(post_body)
-        if resource == 'createPost':
+        if resource == 'posts':
             response = create_post(post_body)
 
         self.wfile.write(response.encode())
