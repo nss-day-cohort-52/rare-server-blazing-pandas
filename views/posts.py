@@ -39,26 +39,39 @@ def get_all_posts():
             posts.append(post.__dict__)
     return json.dumps(posts)
 
-# def get_single_post(id):
-#     with sqlite3.connect("./db.sqlite3") as conn:
-#         conn.row_factory = sqlite3.Row
-#         db_cursor = conn.cursor()
+def get_single_post(id):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
 
-#         db_cursor.execute("""
-#         SELECT 
-#             p.id,
-#             p.user_id,
-#             p.category_id,
-#             p.title,
-#             p.publication_date,
-#             p.image_url,
-#             p.content,
-#             p.approved
-#         FROM Posts p
-#         WHERE p.id = ?
-#         """, (id, ))
-#         data = db_cursor.fetchone()
-#         post = Post(data['id'], data['user_id'], data['category_id'],
-#                 data['title'], data['publication_date'], data['image_url'],
-#                 data['content'], data['approved'])
-#         return json.dumps(post.__dict__)
+        db_cursor.execute("""
+        SELECT 
+            p.id,
+            p.user_id,
+            p.category_id,
+            p.title,
+            p.publication_date,
+            p.image_url,
+            p.content,
+            p.approved,
+            u.username users_username,
+            c.label categories_label
+        FROM Posts p
+        JOIN Users u
+            ON u.id = p.user_id
+        JOIN Categories c
+            ON c.id = p.category_id
+        WHERE p.id = ?
+        """, (id, ))
+        
+        posts = []
+        data = db_cursor.fetchone()
+        post = Post(data['id'], data['user_id'], data['category_id'],
+                data['title'], data['publication_date'], data['image_url'],
+                data['content'], data['approved'])
+        user =  {"username": data['users_username']}
+        category = Category(data['category_id'], data['categories_label'])
+        post.user = user
+        post.category = category.__dict__
+        posts.append(post.__dict__)
+    return json.dumps(post.__dict__)
