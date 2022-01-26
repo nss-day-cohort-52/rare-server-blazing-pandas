@@ -84,16 +84,19 @@ CREATE TABLE "Categories" (
   "label" varchar
 );
 
-INSERT INTO Categories ('label') VALUES ('News');
+
+
+
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
-SELECT * FROM tags
+
 INSERT INTO Tags ('label') VALUES ('React');
 INSERT INTO Tags ('label') VALUES ('Python');
 INSERT INTO Tags ('label') VALUES ('Django');
 INSERT INTO Tags ('label') VALUES ('NSS');
 
+delete from Categories where label="news"
 
 INSERT INTO Posts VALUES (null, 1, 1, 'JavaScript', 43, 'https://c.tenor.com/VFFJ8Ei3C2IAAAAM/rickroll-rick.gif', 'Worked on JS today and it was pretty awful.', 1);
 INSERT INTO Posts VALUES (null, 2, 1, 'JavaScript', 44, 'https://c.tenor.com/VFFJ8Ei3C2IAAAAM/rickroll-rick.gif', 'Worked on JS today and it was pretty much still not that great.', 1);
