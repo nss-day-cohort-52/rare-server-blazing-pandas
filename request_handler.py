@@ -6,6 +6,7 @@ from views.user import create_user, login_user
 from views import get_all_tags, create_tag
 from views import create_user, login_user, get_all_users
 from views import get_all_posts, create_post
+from views import create_postTag
 
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -99,6 +100,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             response = create_tag(post_body)
         if resource == 'posts':
             response = create_post(post_body)
+        if resource == 'postTags':
+            response = create_postTag(post_body)
 
         self.wfile.write(response.encode())
 
