@@ -6,7 +6,7 @@ from views.posts import get_single_post
 from views.user import create_user, login_user
 from views import get_all_tags, create_tag
 from views import create_user, login_user, get_all_users
-from views import get_all_posts, create_post
+from views import get_all_posts, create_post, get_all_posts_by_user
 
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -80,7 +80,11 @@ class HandleRequests(BaseHTTPRequestHandler):
             elif resource == "users":
                 if id is None:
                     response = f"{get_all_users()}"
-        
+        else:
+            ( resource, key, value ) = parsed
+            if resource == "posts":
+                if key == "user_id":
+                    response = f"{get_all_posts_by_user(value)}"
         self.wfile.write(response.encode())
 
 
