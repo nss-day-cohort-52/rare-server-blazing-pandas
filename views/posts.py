@@ -3,6 +3,30 @@ import json
 from models import Post, User, Category
 from models.tag import Tag
 
+def create_post(new_post):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        INSERT INTO Posts
+            (user_id, category_id, title, publication_date, image_url, content, approved)
+        VALUES
+            (?, ?, ?, ?, ?, ?, ?);
+        """, (new_post['user_id'],
+              new_post['category_id'], new_post['title'],
+              new_post['publication_date'],
+              new_post['image_url'], new_post['content'], new_post['approved'], ))
+
+        # The `lastrowid` property on the cursor will return
+        # the primary key of the last thing that got added to
+        # the database.
+        id = db_cursor.lastrowid
+
+        # Add the `id` property to the post dictionary that
+        # was sent by the client so that the client sees the
+        # primary key in the response.
+        new_post['id'] = id
+    return json.dumps(new_post)
 
 def get_all_posts():
     with sqlite3.connect("./db.sqlite3") as conn:
@@ -56,30 +80,6 @@ def get_all_posts():
             post.tags = tags
     return json.dumps(posts)
 
-def create_post(new_post):
-    with sqlite3.connect("./db.sqlite3") as conn:
-        db_cursor = conn.cursor()
-
-        db_cursor.execute("""
-        INSERT INTO Posts
-            (user_id, category_id, title, publication_date, image_url, content, approved)
-        VALUES
-            (?, ?, ?, ?, ?, ?, ?);
-        """, (new_post['user_id'],
-              new_post['category_id'], new_post['title'],
-              new_post['publication_date'],
-              new_post['image_url'], new_post['content'], new_post['approved'], ))
-
-        # The `lastrowid` property on the cursor will return
-        # the primary key of the last thing that got added to
-        # the database.
-        id = db_cursor.lastrowid
-
-        # Add the `id` property to the post dictionary that
-        # was sent by the client so that the client sees the
-        # primary key in the response.
-        new_post['id'] = id
-    return json.dumps(new_post)
 
 def get_single_post(id):
     with sqlite3.connect("./db.sqlite3") as conn:
@@ -169,4 +169,27 @@ def get_all_posts_by_user(id):
             post.user = user
             post.category = category.__dict__
             posts.append(post.__dict__)
+            db_cursor.execute("""
+                select t.id, t.label
+                from PostTags pt
+                join Tags t on t.id = pt.tag_id
+                where pt.post_id = ?
+                order by t.id
+            """, (post.id, ))
+            tags = []
+            tags_dataset = db_cursor.fetchall()
+            
+            for tag_row in tags_dataset:
+                tag = Tag(tag_row['id'], tag_row['label'])
+                tags.append(tag.__dict__)
+        
+        post.tags = tags
     return json.dumps(posts)
+
+def delete_post(id):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        DELETE FROM Posts
+        WHERE id = ?
+        """, (id, ))
