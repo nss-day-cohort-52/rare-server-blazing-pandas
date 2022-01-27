@@ -3,6 +3,7 @@ import json
 from views import get_all_tags, create_tag
 from views import create_user, login_user, get_all_users
 from views import get_all_posts, create_post
+from views.posts import delete_post
 
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -103,7 +104,10 @@ class HandleRequests(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         """Handle DELETE Requests"""
-        pass
+        self._set_headers(204)
+        (resource, id) = self.parse_url()
+        if resource == "posts":
+            delete_post(id)
 
 
 def main():
