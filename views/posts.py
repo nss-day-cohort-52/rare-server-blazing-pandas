@@ -106,16 +106,14 @@ def get_single_post(id):
         WHERE p.id = ?
         """, (id, ))
         
-        posts = []
         data = db_cursor.fetchone()
         post = Post(data['id'], data['user_id'], data['category_id'],
                 data['title'], data['publication_date'], data['image_url'],
                 data['content'], data['approved'])
-        user =  {"username": data['users_username']}
+        user =  {"id":data['user_id'],"username":data['users_username']}
         category = Category(data['category_id'], data['categories_label'])
         post.user = user
         post.category = category.__dict__
-        posts.append(post.__dict__)
         db_cursor.execute("""
                 select t.id, t.label
                 from PostTags pt

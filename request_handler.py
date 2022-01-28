@@ -2,15 +2,15 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from views.categories import create_category, get_all_categories
 from views import get_all_tags, create_tag
-from views import create_user, login_user, get_all_users
-from views import get_all_posts, create_post, get_all_posts_by_user, get_single_post, get_all_posts_by_category
-from views.posts import delete_post
+from views import get_all_posts, create_post, get_all_posts_by_user, get_single_post, get_all_posts_by_category, delete_post
+from views import create_user, login_user, get_all_users, get_single_user
+
 from views import create_postTag
 
 class HandleRequests(BaseHTTPRequestHandler):
     """Handles the requests to this server"""
 
-    def parse_url(self):
+    def parse_url(self): 
         """Parse the url into the resource and id"""
         path_params = self.path.split('/')
         resource = path_params[1]
@@ -78,6 +78,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             elif resource == "users":
                 if id is None:
                     response = f"{get_all_users()}"
+                else:
+                    response = f"{get_single_user(id)}"
         else:
             ( resource, key, value ) = parsed
             if resource == "posts":
