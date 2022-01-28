@@ -85,7 +85,6 @@ class HandleRequests(BaseHTTPRequestHandler):
             if resource == "posts":
                 if key == "user_id":
                     response = f"{get_all_posts_by_user(value)}"
-            if resource == "categories":
                 if key == "category_id":
                     response = f"{get_all_posts_by_category(value)}"
         self.wfile.write(response.encode())
