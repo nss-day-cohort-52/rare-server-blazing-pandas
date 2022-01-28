@@ -117,3 +117,41 @@ def get_all_users():
 
     # Use `json` package to properly serialize list as JSON
     return json.dumps(users)
+
+def get_single_user(id):
+    # Open a connection to the database
+    with sqlite3.connect("./db.sqlite3") as conn:
+
+        # Just use these. It's a Black Box.
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute("""
+        SELECT
+            u.id,
+            u.first_name,
+            u.last_name,
+            u.bio,
+            u.username,
+            u.profile_image_url,
+            u.created_on
+        FROM users u
+        WHERE u.id = ?
+        """, (id,))
+
+        # Convert rows of data into a Python list
+        data = db_cursor.fetchone()
+
+        user = {
+                "id": data['id'], 
+                "first_name": data['first_name'],
+                "last_name": data['last_name'],
+                "bio": data['bio'],
+                "username": data['username'],
+                "image_url":data['profile_image_url'],
+                "created_on": data['created_on']
+                }
+
+    # Use `json` package to properly serialize list as JSON
+    return json.dumps(user)
