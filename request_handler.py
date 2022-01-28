@@ -1,11 +1,11 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-from views.categories import get_all_categories
+from views.categories import create_category, get_all_categories
 from views import get_all_tags, create_tag
 from views import create_user, login_user, get_all_users
 from views import get_all_posts, create_post, get_all_posts_by_user, get_single_post, get_all_posts_by_category
 from views.posts import delete_post
-
+from views import create_postTag
 
 class HandleRequests(BaseHTTPRequestHandler):
     """Handles the requests to this server"""
@@ -105,6 +105,11 @@ class HandleRequests(BaseHTTPRequestHandler):
             response = create_tag(post_body)
         if resource == 'posts':
             response = create_post(post_body)
+        if resource == 'postTags':
+            response = create_postTag(post_body)
+        if resource == 'categories':
+            response = create_category(post_body)
+        
 
         self.wfile.write(response.encode())
 
